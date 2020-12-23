@@ -1,3 +1,7 @@
+body {
+  background-color: #f5f6fa;
+}
+
 .app {
 }
 
@@ -7,4 +11,9 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 30px;
+}
+
+.app__stats {
+  display: flex;
+  justify-content: space-between;
 }
