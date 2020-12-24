@@ -11,14 +11,16 @@ import {
 import InfoBox from "./InfoBox";
 import Map from "./Map";
 import Table from "./Table";
+import { sortData } from "./util";
 
 function App() {
-  const [countries, setCountries] = useState([]);
-  const [country, setCountry] = useState("worldwide");
-  const [countryInfo, setCountryInfo] = useState({});
-  const [tableData, setTableData] = useState([]);
+  const [countries, setCountries] = useState([]); //for whole list of countries
+  const [country, setCountry] = useState("worldwide"); //for seleced country
+  const [countryInfo, setCountryInfo] = useState({}); //data of selected country's data
+  const [tableData, setTableData] = useState([]); // whole data of disease
 
   useEffect(() => {
+    //load list of countries
     fetch("https://disease.sh/v3/covid-19/all")
       .then((response) => response.json())
       .then((data) => {
@@ -27,6 +29,8 @@ function App() {
   }, []);
 
   useEffect(() => {
+    //load list of name and iso2 of countries
+    //load whole data of country about disease
     const getCountriesData = async () => {
       await fetch("https://disease.sh/v3/covid-19/countries")
         .then((response) => response.json())
@@ -36,7 +40,9 @@ function App() {
             value: country.countryInfo.iso2,
           }));
 
-          setTableData(data);
+          const sortedData = sortData(data);
+
+          setTableData(sortedData);
           setCountries(countries);
         });
     };
@@ -53,6 +59,7 @@ function App() {
         ? `https://disease.sh/v3/covid-19/all`
         : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
 
+    //load selected country's data
     await fetch(url)
       .then((response) => response.json())
       .then((data) => {
